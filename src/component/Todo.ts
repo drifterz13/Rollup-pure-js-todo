@@ -2,50 +2,37 @@ import { removeTodo, updateTodo } from '../store'
 import { TodoType } from '../types'
 
 export class Todo {
-  title: string
-  done: boolean
-  id: number
+  todo: TodoType
   el = document.createElement('div')
+  checkbox: TodoCheckbox
 
   constructor(todo: TodoType) {
-    this.title = todo.title
-    this.done = todo.done
-    this.id = todo.id
+    this.todo = todo
+    this.checkbox = new TodoCheckbox(todo)
 
     this.el.className = `app-todo p-4 shadow-md mb-2 bg-white border-rounded`
     this.el.innerHTML = `
-      <div class="app-remove-todo text-red-400 float-right cursor-pointer">X</div>
-      <div>
-        <span class="font-bold">Title: </span> <span class="app-todo-title" contenteditable>${
-          todo.title
-        }</span>
-      </div>
+      <div class="app-remove-todo text-red-400 float-right cursor-pointer">x</div>
+      <p class="app-todo-title ${
+        this.todo.done ? 'line-through' : ''
+      }" contenteditable> ${todo.title}</p>
       <div>
         <span class="font-bold">Status: </span> ${
           todo.done ? 'done' : 'not done'
         }
       </div>
     `
+    this.el.insertBefore(this.checkbox.el, this.el.firstChild)
 
     const todoTitleEl: HTMLSpanElement = this.el.querySelector(
       '.app-todo-title'
     )
-    todoTitleEl.addEventListener('blur', (e) => {
-      const todo = {
-        id: this.id,
-        title: todoTitleEl.innerText,
-        done: this.done,
-      }
-      updateTodo(todo)
+    todoTitleEl.addEventListener('blur', () => {
+      this.updateTitle(todoTitleEl.innerText)
     })
     todoTitleEl.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
-        const todo = {
-          id: this.id,
-          title: todoTitleEl.innerText,
-          done: this.done,
-        }
-        updateTodo(todo)
+        this.updateTitle(todoTitleEl.innerText)
       }
     })
 
@@ -53,7 +40,35 @@ export class Todo {
       '.app-remove-todo'
     )
     removeTodoEl.addEventListener('click', () => {
-      removeTodo(Number(this.id))
+      removeTodo(this.todo.id)
     })
+  }
+
+  updateTitle(title: string) {
+    const todo = {
+      ...this.todo,
+      title,
+    }
+    updateTodo(todo)
+  }
+}
+
+class TodoCheckbox {
+  el = document.createElement('input')
+  todo: TodoType
+
+  constructor(todo: TodoType) {
+    this.todo = todo
+    this.el.setAttribute('type', 'checkbox')
+    this.el.checked = todo.done
+
+    this.el.addEventListener('change', (e) => {
+      this.el.checked = !this.el.checked
+      this.toggleComplete()
+    })
+  }
+
+  toggleComplete() {
+    updateTodo({ ...this.todo, done: !this.todo.done })
   }
 }
