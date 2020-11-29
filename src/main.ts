@@ -13,7 +13,6 @@ class TodoInput {
       'app-todo-input w-full p-2 mb-4 border border-solid border-rounded'
 
     this.el.addEventListener('input', (e) => {
-      console.log('val', (e.target as HTMLInputElement).value)
       this.value = (e.target as HTMLInputElement).value
     })
     this.el.addEventListener('keydown', (e: KeyboardEvent) => {
