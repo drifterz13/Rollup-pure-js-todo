@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "es2015",
+    "target": "esnext",
+    "jsx": "preserve",
+    "sourceMap": true,
+    "moduleResolution": "node",
+  },
+  "exclude": ["node_modules", "**/node_modules/*"]
+}

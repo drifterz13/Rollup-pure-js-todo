@@ -1,0 +1,9 @@
+@import "tailwindcss/base";
+@import "tailwindcss/utilities";
+@import "tailwindcss/components";
+
+
+body {
+  background: #f3f4f5;
+  height: 100vh;
+}
