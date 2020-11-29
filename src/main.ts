@@ -1,33 +1,9 @@
-import { autorun, toJS } from 'mobx'
 import './css/style.css'
-import { addTodo, removeTodo, todosMapId, updateTodo } from './store'
-import { TodoType } from './types'
+import { autorun, toJS } from 'mobx'
+import { Todo } from './component/Todo'
+import { TodoInput } from './component/TodoInput'
+import { todosMapId } from './store'
 
-class TodoInput {
-  private value = ''
-  el = document.createElement('input')
-
-  constructor() {
-    this.el.setAttribute('type', 'text')
-    this.el.className =
-      'app-todo-input w-full p-2 mb-4 border border-solid border-rounded'
-
-    this.el.addEventListener('input', (e) => {
-      this.value = (e.target as HTMLInputElement).value
-    })
-    this.el.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
-        addTodo(this.value)
-        this.value = ''
-        this.el.value = ''
-      }
-    })
-  }
-
-  getValue() {
-    return this.value
-  }
-}
 const todoInput = new TodoInput()
 
 createNavbar()
@@ -58,63 +34,6 @@ function createSection() {
   section.appendChild(todosEl)
 
   app.appendChild(section)
-}
-
-class Todo {
-  title: string
-  done: boolean
-  id: number
-  el = document.createElement('div')
-
-  constructor(todo: TodoType) {
-    this.title = todo.title
-    this.done = todo.done
-    this.id = todo.id
-
-    this.el.className = `app-todo p-4 shadow-md mb-2 bg-white border-rounded`
-    this.el.innerHTML = `
-      <div class="app-remove-todo text-red-400 float-right cursor-pointer">X</div>
-      <div>
-        <span class="font-bold">Title: </span> <span class="app-todo-title" contenteditable>${
-          todo.title
-        }</span>
-      </div>
-      <div>
-        <span class="font-bold">Status: </span> ${
-          todo.done ? 'done' : 'not done'
-        }
-      </div>
-    `
-
-    const todoTitleEl: HTMLSpanElement = this.el.querySelector(
-      '.app-todo-title'
-    )
-    todoTitleEl.addEventListener('blur', (e) => {
-      const todo = {
-        id: this.id,
-        title: todoTitleEl.innerText,
-        done: this.done,
-      }
-      updateTodo(todo)
-    })
-    todoTitleEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const todo = {
-          id: this.id,
-          title: todoTitleEl.innerText,
-          done: this.done,
-        }
-        updateTodo(todo)
-      }
-    })
-
-    const removeTodoEl: HTMLDivElement = this.el.querySelector(
-      '.app-remove-todo'
-    )
-    removeTodoEl.addEventListener('click', () => {
-      removeTodo(Number(this.id))
-    })
-  }
 }
 
 autorun(() => {
