@@ -10,7 +10,7 @@ export class Todo {
 
     this.el.className = `app-todo p-4 shadow-md mb-2 bg-white border-rounded grid grid-rows-3 grid-cols-2`
     this.el.innerHTML = `
-      <input type="checkbox" />
+      <input type="checkbox" ${this.todo.done ? 'checked' : ''} />
       <div class="app-remove-todo grid justify-end cursor-pointer">
         <div class="text-red-400 px-2">x</div>
       </div>
@@ -55,7 +55,6 @@ export class Todo {
   }
 
   updateTitle(title: string) {
-    console.log('todo', this.todo)
     const todo = {
       ...this.todo,
       title,
