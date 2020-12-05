@@ -1,6 +1,6 @@
 module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
+  purge: process.env.NODE_ENV === 'production' ? ['./src/**/*.ts'] : [],
+  darkMode: false,
   theme: {
     extend: {},
   },
@@ -8,4 +8,4 @@ module.exports = {
     extend: {},
   },
   plugins: [],
-};
+}

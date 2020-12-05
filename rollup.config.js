@@ -4,6 +4,7 @@ import typescript from 'rollup-plugin-typescript2'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import livereload from 'rollup-plugin-livereload'
+import { terser } from 'rollup-plugin-terser'
 
 export default {
   input: 'src/main.ts',
@@ -20,11 +21,15 @@ export default {
     postcss({
       extract: true,
     }),
-    serve({
-      contentBase: ['build'],
-      host: 'localhost',
-      port: 1234,
-    }),
-    livereload(),
+    ...(process.env.NODE_ENV === 'production'
+      ? [terser()]
+      : [
+          serve({
+            contentBase: ['build'],
+            host: 'localhost',
+            port: 1234,
+          }),
+          livereload(),
+        ]),
   ],
 }

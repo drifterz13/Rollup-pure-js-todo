@@ -5,10 +5,10 @@ import { TodoInput } from './component/TodoInput'
 import { changeFilter, filteredTodos, selectedFilter } from './store'
 import { FilterType } from './types'
 
-createNavbar()
-createSection()
+Navbar()
+Section()
 
-function createNavbar() {
+function Navbar() {
   const app = document.getElementById('app')
   const navbar = document.createElement('div')
   navbar.className = `bg-gray-50`
@@ -21,7 +21,7 @@ function createNavbar() {
   app.appendChild(navbar)
 }
 
-function createSection() {
+function Section() {
   const app = document.getElementById('app')
   const section = document.createElement('div')
   section.className = `app-section container mx-auto mt-6`
@@ -29,7 +29,7 @@ function createSection() {
   const todosEl = document.createElement('div')
   todosEl.className = 'app-todos'
 
-  const filters = createFilters()
+  const filters = Filters()
   section.appendChild(filters)
   const todoInput = new TodoInput()
   section.appendChild(todoInput.el)
@@ -38,7 +38,7 @@ function createSection() {
   app.appendChild(section)
 }
 
-function createFilters() {
+function Filters() {
   const filtersEl = document.createElement('div')
   filtersEl.className = `app-filters my-4`
   filtersEl.innerHTML = `
