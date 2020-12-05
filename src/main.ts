@@ -4,8 +4,6 @@ import { Todo } from './component/Todo'
 import { TodoInput } from './component/TodoInput'
 import { todosMapId } from './store'
 
-const todoInput = new TodoInput()
-
 createNavbar()
 createSection()
 
@@ -30,6 +28,7 @@ function createSection() {
   const todosEl = document.createElement('div')
   todosEl.className = 'app-todos'
 
+  const todoInput = new TodoInput()
   section.appendChild(todoInput.el)
   section.appendChild(todosEl)
 

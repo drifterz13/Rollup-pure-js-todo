@@ -4,26 +4,27 @@ import { TodoType } from '../types'
 export class Todo {
   todo: TodoType
   el = document.createElement('div')
-  checkbox: TodoCheckbox
 
   constructor(todo: TodoType) {
     this.todo = todo
-    this.checkbox = new TodoCheckbox(todo)
 
-    this.el.className = `app-todo p-4 shadow-md mb-2 bg-white border-rounded`
+    this.el.className = `app-todo p-4 shadow-md mb-2 bg-white border-rounded grid grid-rows-3 grid-cols-2`
     this.el.innerHTML = `
-      <div class="app-remove-todo text-red-400 float-right cursor-pointer">x</div>
-      <p class="app-todo-title ${
+      <input type="checkbox" />
+      <div class="app-remove-todo grid justify-end cursor-pointer">
+        <div class="text-red-400 px-2">x</div>
+      </div>
+      <p class="app-todo-title col-span-2 ${
         this.todo.done ? 'line-through' : ''
       }" contenteditable> ${todo.title}</p>
-      <div>
+      <div class="col-span-2">
         <span class="font-bold">Status: </span> ${
           todo.done ? 'done' : 'not done'
         }
       </div>
     `
-    this.el.insertBefore(this.checkbox.el, this.el.firstChild)
 
+    // Editable title
     const todoTitleEl: HTMLSpanElement = this.el.querySelector(
       '.app-todo-title'
     )
@@ -36,39 +37,29 @@ export class Todo {
       }
     })
 
+    // Remove button
     const removeTodoEl: HTMLDivElement = this.el.querySelector(
       '.app-remove-todo'
     )
     removeTodoEl.addEventListener('click', () => {
       removeTodo(this.todo.id)
     })
+
+    // Checkbox
+    const checkboxEl: HTMLInputElement = this.el.querySelector(
+      `input[type="checkbox"]`
+    )
+    checkboxEl.addEventListener('change', () => {
+      updateTodo({ ...this.todo, done: !this.todo.done })
+    })
   }
 
   updateTitle(title: string) {
+    console.log('todo', this.todo)
     const todo = {
       ...this.todo,
       title,
     }
     updateTodo(todo)
-  }
-}
-
-class TodoCheckbox {
-  el = document.createElement('input')
-  todo: TodoType
-
-  constructor(todo: TodoType) {
-    this.todo = todo
-    this.el.setAttribute('type', 'checkbox')
-    this.el.checked = todo.done
-
-    this.el.addEventListener('change', (e) => {
-      this.el.checked = !this.el.checked
-      this.toggleComplete()
-    })
-  }
-
-  toggleComplete() {
-    updateTodo({ ...this.todo, done: !this.todo.done })
   }
 }
