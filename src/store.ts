@@ -1,9 +1,9 @@
-import { observable, action, autorun, toJS } from 'mobx'
-import { TodoType } from './types'
+import { observable, action, autorun, toJS, computed } from 'mobx'
+import { FilterType, TodoType } from './types'
 
 let id = 1
 
-export const todosMapId = observable<{ [id: string]: TodoType }>({
+const todosMapId = observable<{ [id: string]: TodoType }>({
   1: {
     id: 1,
     title: 'Learn Javascript.',
@@ -35,6 +35,30 @@ export function removeTodo(id: number) {
   })(todosMapId)
 }
 
+export const selectedFilter = observable.box<FilterType>('all')
+
+export function changeFilter(filter: FilterType) {
+  selectedFilter.set(filter)
+}
+
+export const filteredTodos = computed(() => {
+  const filter = selectedFilter.get()
+  const todos = Object.keys(todosMapId).map((id) => todosMapId[id])
+  if (filter === 'all') {
+    return todos
+  }
+  if (filter === 'completed') {
+    return todos.filter((todo) => todo.done)
+  }
+  if (filter === 'incomplete') {
+    return todos.filter((todo) => !todo.done)
+  }
+})
+
 autorun(() => {
   console.log('todos', toJS(todosMapId))
+})
+
+autorun(() => {
+  console.log('selected filter', selectedFilter.get())
 })

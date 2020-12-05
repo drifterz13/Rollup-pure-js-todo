@@ -3,3 +3,5 @@ export type TodoType = {
   title: string
   done: boolean
 }
+
+export type FilterType = 'all' | 'incomplete' | 'completed'
