@@ -3,6 +3,7 @@ import postcss from 'rollup-plugin-postcss'
 import typescript from 'rollup-plugin-typescript2'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
+import livereload from 'rollup-plugin-livereload'
 
 export default {
   input: 'src/main.ts',
@@ -24,5 +25,6 @@ export default {
       host: 'localhost',
       port: 1234,
     }),
+    livereload(),
   ],
 }
